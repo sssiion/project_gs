@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>엑셀 업로드</title>
+</head>
+<body>
+  <h2>📁 엑셀 업로드</h2>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".xlsx" required />
+    <button type="submit">업로드</button>
+  </form>
+  <p id="status"></p>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch('/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await res.json();
+        status.textContent = result.message || '업로드 완료!';
+      } catch (err) {
+        status.textContent = '❌ 업로드 실패';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>
